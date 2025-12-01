@@ -85,21 +85,21 @@ ss<- min(results_df$sum_sq) #this is slope of 1.35 and intercept of -1.49
 
 ####################### part b ######################################
 
-# Objective function: sum of squared residuals
+#function for sum of squared residuals
 ssq <- function(par, x_vals, y_vals) {
   slope <- par[1]
   intercept <- par[2]
   y_fit <- slope * x_vals + intercept
   sum((y - y_fit)^2)
 }
-# Initial guesses for slope and intercept
+#plugging in initial guess for slope and intercept
 init <- c(1, 0)   # slope = 1, intercept = 0
 
-# Run optimization
+#use omptim by calling the ssq fn-- had to google this and use help page
 fit <- optim(par = init, fn = ssq, x = x_vals, y = y_vals)
 
-fit$par      # optimized slope and intercept
-fit$value    # minimized sum of squares
+fit$par      #pulling out slope and intercept computed by optim
+fit$value    #pulling out the minimized sum of squares
 
 ###### this method yields a slope of 1.35 and an intercept of -1.37
 
@@ -150,6 +150,36 @@ results[order(results_obj3$nll), ][1:5, ]
 #####this grid search yields a slope of 1.35 and an intercept of -1.49
 
 ################# part b ###################################################
+
+#function for neg log likelihood
+nll <- function(par, x_vals, y_vals) {
+  slope <- par[1]
+  intercept <- par[2]
+  y_fit <- slope * x_vals + intercept
+  
+  #define residuals inside fn
+  resid <- y_vals - y_fit
+  n <- length(y_vals)
+  
+  #variance computed from obj 2 above
+  sigma2 <- ss/ ((length(x)-1)) 
+  
+  #neg log likelihood calculation
+  nll_value <- (n/2) * log(2*pi*sigma2) + sum(resid^2) / (2*sigma2)
+  return(nll_value) #need a return statement!
+}
+#plugging in initial guess for slope and intercept
+init <- c(1, 0)   # slope = 1, intercept = 0
+
+#use omptim by calling the ssq fn-- had to google this and use help page
+fit_nll <- optim(par = init, fn = nll, x = x_vals, y = y_vals)
+
+fit_nll$par      #pulling out slope and intercept computed by optim
+fit_nll$value    #pulling out the minimized sum of squares
+
+
+
+###using optim() and the negative log likelihood, the slope and intercept are 1.35 and -1.37
 
 
 
