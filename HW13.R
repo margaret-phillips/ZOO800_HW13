@@ -25,6 +25,8 @@ y<- cbind(dragons$acres_on_fire) #creating matrix for y (dependent variable)
 b <- solve(t(x) %*% x) %*% t(x) %*% y
 print(b)
 
+## The slope is 1.35 and intercept is -1.37
+
 ##------------- Objective 2 ---------------------------##
 "Estimate the parameters of the linear regression of area burned on dragon size using ordinary
 least squares based on:
@@ -105,8 +107,16 @@ fit$value    #pulling out the minimized sum of squares
 
 ################### part c ################################################
 
+#confirm that the model converged and isn't sensitive to starting values
+#using the code from lecture to print these values from output
 
+print(fit$par)
+print(fit$value)
+print(fit$counts)
+print(fit$convergence)
+print(fit$message)
 
+#No message, convergence is 0 and gradient is NA, so I think I'm all set.
 
 ##-------------- Objective 3 ---------------------------##
 "Estimate the parameters of the linear regression of area burned on dragon size using maximum
@@ -185,8 +195,25 @@ fit_nll$value    #pulling out the minimized sum of squares
 
 ################# part c ##################################################
 
+#repeating method from 2c above using code from lecture
+
+print(fit_nll$par)
+print(fit_nll$value)
+print(fit_nll$counts)
+print(fit_nll$convergence)
+print(fit_nll$message)
+
+#No message, convergence is 0 and gradient is NA, so I think I'm all set.
+
 ##----------------------- Objective 4 ----------------------------##
 
 "A. Compare the slope and intercept estimates from the three approaches. Are they the same?
 (They should be very close)
 "
+
+" The slope and intercept for objective 1 (the analytical solution) and objectives 2b
+and 3b (optim function for sum of squares and neg log likelihood) were 1.35 and -1.37, 
+respectively. The grid search method using sum of squares and negative log likelihood
+yielded a slope of 1.35 again, but an intercept of -1.49. I used the same sequences for 
+slope and intercept for both grid searches and narrowed in, but it's possible that even
+smaller steps would be needed to close in on the -1.37 intercept. "
